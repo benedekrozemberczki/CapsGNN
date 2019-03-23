@@ -13,6 +13,6 @@ This repository provides a PyTorch implementation of CapsGNN as described in the
 > Capsule Graph Neural Network.
 > Zhang Xinyi, Lihui Chen.
 > ICLR, 2019.
-> [[Paper]](https://github.com/benedekrozemberczki/CapsGNN/blob/master/paper.pdf)
+> [[Paper]](https://openreview.net/forum?id=Byl8BnRcYm)
 
 ### Requirements
