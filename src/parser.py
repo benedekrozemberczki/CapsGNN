@@ -22,13 +22,8 @@ def parameter_parser():
 
     parser.add_argument("--prediction-path",
                         nargs = "?",
-                        default = "./output/erdos_predictions.csv",
+                        default = "./output/watts_predictions.csv",
 	                help = "Path to store the predicted graph labels.")
-
-    parser.add_argument("--log-path",
-                        nargs = "?",
-                        default = "./logs/erdos_gam_logs.json",
-	                help = "Log json with parameters and performance.")
 
     parser.add_argument("--epochs",
                         type = int,
@@ -53,6 +48,11 @@ def parameter_parser():
     parser.add_argument("--weight-decay",
                         type = float,
                         default = 10**-5,
+	                help = "Learning rate. Default is 10^-5.")
+
+    parser.add_argument("--learning-rate",
+                        type = float,
+                        default = 0.01,
 	                help = "Learning rate. Default is 10^-5.")
     
     return parser.parse_args()

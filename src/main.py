@@ -11,7 +11,7 @@ def main():
     model = CapsGNNTrainer(args)
     model.fit()
     model.score()
-    #model.save_predictions_and_logs()
+    model.save_predictions()
 
 if __name__ == "__main__":
     main()

@@ -2,11 +2,12 @@ import torch
 import glob
 import json
 import random
-from tqdm import tqdm
+from tqdm import tqdm, trange
 import numpy as np
 from utils import create_numeric_mapping
 from torch_geometric.nn import GCNConv
 from layers import ListModule
+import pandas as pd
 
 class CapsGNN(torch.nn.Module):
 
@@ -105,15 +106,17 @@ class CapsGNNTrainer(object):
     def fit(self):
         print("\nTraining started.\n")
         self.model.train()
-        optimizer = torch.optim.Adam(self.model.parameters(), lr=0.01, weight_decay=5e-4)
+        optimizer = torch.optim.Adam(self.model.parameters(), lr=self.args.learning_rate, weight_decay=self.args.weight_decay)
 
         for epoch in tqdm(range(self.args.epochs), desc = "Epochs: ", leave = True):
             random.shuffle(self.train_graph_paths)
             self.create_batches()
-            losses = 0
-            for batch in tqdm(self.batches):
+            losses = 0       
+            self.steps = trange(len(self.batches), desc="Loss")
+            for step in self.steps:
                 accumulated_losses = 0
                 optimizer.zero_grad()
+                batch = self.batches[step]
                 for path in batch:
                     data = self.create_input_data(path)
                     prediction = self.model(data)
@@ -122,7 +125,9 @@ class CapsGNNTrainer(object):
                 accumulated_losses = accumulated_losses/len(path)
                 accumulated_losses.backward()
                 optimizer.step()
-
+                losses = losses+accumulated_losses.item()
+                average_loss = losses/(step+1)
+                self.steps.set_description("CapsGNN (Loss=%g)" % round(average_loss,4))
 
     def score(self):
         print("\n\nScoring.\n")
@@ -135,5 +140,12 @@ class CapsGNNTrainer(object):
             prediction = torch.argmax(prediction).item()
             self.predictions.append(prediction)
             self.hits.append(prediction==data["target"])
-        print(np.mean(self.hits))
+        print("\nAccuracy: " + str(round(np.mean(self.hits),4)))
+
+    def save_predictions(self):
+        identifiers = [path.split("/")[-1].strip(".json") for path in self.test_graph_paths]
+        out = pd.DataFrame()
+        out["id"] = identifiers
+        out["predictions"] = self.predictions
+        out.to_csv(self.args.prediction_path, index = None)
 
