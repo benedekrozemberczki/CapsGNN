@@ -58,7 +58,6 @@ Training a CapsGNN model is handled by the `src/main.py` script which provides t
 ```
 #### Model options
 ```
-  --seed               INT     Random seed.                       Default is 42.
   --number of walks    INT     Number of random walks per node.   Default is 10.
   --window-size        INT     Skip-gram window size.             Default is 5.
   --negative-samples   INT     Number of negative samples.        Default is 5.
@@ -69,7 +68,7 @@ Training a CapsGNN model is handled by the `src/main.py` script which provides t
   --learning-rate      FLOAT   SGD learning rate.                 Default is 0.025
 ```
 ### Examples
-The following commands learn an embedding and save it with the persona map. Training a model on the default dataset.
+The following commands learn a model and save the predictions. Training a model on the default dataset:
 ```
 python src/main.py
 ```
@@ -77,7 +76,7 @@ python src/main.py
   <img width="500" src="capsgnn.gif">
 </p>
 
-Training a Splitter model for a 100 epochs.
+Training a CapsGNNN model for a 100 epochs.
 ```
 python src/main.py --epochs 100
 ```
