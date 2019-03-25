@@ -73,5 +73,4 @@ def parameter_parser():
                         default = 1.0,
 	                help = "Loss combination weight. Default is 1.0.")
     
-    
     return parser.parse_args()
