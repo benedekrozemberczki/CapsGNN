@@ -1,9 +1,3 @@
-import json
-import glob
-import torch
-import numpy as np
-import networkx as nx
-from tqdm import tqdm
 from texttable import Texttable
 
 def tab_printer(args):
@@ -18,9 +12,9 @@ def tab_printer(args):
     print(t.draw())
 
 def create_numeric_mapping(node_properties):
+    """
+    Create node feature map.
+    :param node_properties: List of features sorted.
+    :return : Feature numeric map.
+    """
     return {value:i for i, value in enumerate(node_properties)}
-
-
-
-      
-    
