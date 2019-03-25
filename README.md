@@ -46,7 +46,7 @@ The **edges** key has an edge list value which descibes the connectivity structu
 
 ### Outputs
 
-The embeddings are saved in the `input/` directory. Each embedding has a header and a column with the node IDs. Finally, the node embedding is sorted by the node ID column.
+The predictions are saved in the `output/` directory. Each embedding has a header and a column with the graph identifiers. Finally, the predictions are sorted by the identifier column.
 
 ### Options
 Training a CapsGNN model is handled by the `src/main.py` script which provides the following command line arguments.
@@ -77,9 +77,9 @@ python src/main.py
   <img width="500" src="capsgnn.gif">
 </p>
 
-Training a Splitter model with 32 dimensions.
+Training a Splitter model for a 100 epochs.
 ```
-python src/main.py --dimensions 32
+python src/main.py --epochs 100
 ```
 Increasing the number of walks and the walk length.
 ```
