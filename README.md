@@ -15,7 +15,7 @@ This repository provides a PyTorch implementation of CapsGNN as described in the
 > ICLR, 2019.
 > [[Paper]](https://openreview.net/forum?id=Byl8BnRcYm)
 
-The core Capsule Neural Network implementation adapted is available [[here]](https://github.com/benedekrozemberczki/CapsGNN).
+The core Capsule Neural Network implementation adapted is available [[here]](https://github.com/timomernick/pytorch-capsule).
 
 ### Requirements
 The codebase is implemented in Python 3.5.2. package versions used for development are just below.
