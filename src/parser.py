@@ -61,7 +61,7 @@ def parameter_parser():
     parser.add_argument("--weight-decay",
                         type = float,
                         default = 10**-6,
-	                help = "Learning rate. Default is 10^-5.")
+	                help = "Weight decay. Default is 10^-6.")
 
     parser.add_argument("--learning-rate",
                         type = float,
@@ -71,7 +71,7 @@ def parameter_parser():
     parser.add_argument("--lambd",
                         type = float,
                         default = 1.0,
-	                help = "Learning rate. Default is 10^-5.")
+	                help = "Loss combination weight. Default is 10^-5.")
     
     
     return parser.parse_args()
