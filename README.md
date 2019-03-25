@@ -87,5 +87,5 @@ python src/main.py --epochs 100
 ```
 Changing the batch size.
 ```
-python src/main.py --batchs-size 128
+python src/main.py --batch-size 128
 ```
