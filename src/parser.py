@@ -55,8 +55,8 @@ def parameter_parser():
 
     parser.add_argument("--number-of-capsules",
                         type = int,
-                        default = 5,
-	                help = "Number of Graph Convolutional Layers. Default is 0.001.")
+                        default = 16,
+	                help = "Number of capsules per layer. Default is 16.")
 
     parser.add_argument("--weight-decay",
                         type = float,
