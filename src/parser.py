@@ -71,7 +71,7 @@ def parameter_parser():
     parser.add_argument("--lambd",
                         type = float,
                         default = 1.0,
-	                help = "Loss combination weight. Default is 10^-5.")
+	                help = "Loss combination weight. Default is 1.0.")
     
     
     return parser.parse_args()
