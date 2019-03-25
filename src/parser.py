@@ -5,7 +5,6 @@ def parameter_parser():
     A method to parse up command line parameters. By default it learns on the Watts-Strogatz dataset.
     The default hyperparameters give good results without cross-validation.
     """
-
     parser = argparse.ArgumentParser(description = "Run CapsGNN.")
 	
     parser.add_argument("--train-graph-folder",
@@ -55,8 +54,8 @@ def parameter_parser():
 
     parser.add_argument("--number-of-capsules",
                         type = int,
-                        default = 16,
-	                help = "Number of capsules per layer. Default is 16.")
+                        default = 8,
+	                help = "Number of capsules per layer. Default is 8.")
 
     parser.add_argument("--weight-decay",
                         type = float,
