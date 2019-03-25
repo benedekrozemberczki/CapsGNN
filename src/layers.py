@@ -39,6 +39,9 @@ class ListModule(torch.nn.Module):
         return len(self._modules)
 
 class PrimaryCapsuleLayer(torch.nn.Module):
+    """
+    https://github.com/timomernick/pytorch-capsule
+    """
     def __init__(self, in_units, in_channels, num_units, capsule_dimensions):
         super(PrimaryCapsuleLayer, self).__init__()
 
@@ -64,6 +67,9 @@ class PrimaryCapsuleLayer(torch.nn.Module):
 
 
 class SecondaryCapsuleLayer(torch.nn.Module):
+    """
+    https://github.com/timomernick/pytorch-capsule
+    """
 
     def __init__(self, in_units, in_channels, num_units, unit_size):
         super(SecondaryCapsuleLayer, self).__init__()
@@ -119,6 +125,7 @@ class Attention(torch.nn.Module):
 
 def margin_loss(scores, target, loss_lambda):
     """
+    https://github.com/timomernick/pytorch-capsule
     """
     batch_size = scores.size(0)
     v_mag = torch.sqrt((scores**2).sum(dim=2, keepdim=True))
