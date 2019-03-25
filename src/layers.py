@@ -1,4 +1,5 @@
 import torch
+from torch.autograd import Variable
 
 class ListModule(torch.nn.Module):
     """
@@ -36,3 +37,131 @@ class ListModule(torch.nn.Module):
         Number of layers.
         """
         return len(self._modules)
+
+
+
+class PrimaryCapsuleLayer(torch.nn.Module):
+    def __init__(self, in_units, in_channels, num_units, capsule_dimensions):
+        super(PrimaryCapsuleLayer, self).__init__()
+
+        self.num_units = num_units
+        self.units = []
+        for i in range(self.num_units):
+            unit = torch.nn.Conv2d(in_channels=in_channels, out_channels=capsule_dimensions, kernel_size=(1,in_units), stride=1, bias=True)
+            self.add_module("unit_" + str(i), unit)
+            self.units.append(unit)
+
+    @staticmethod
+    def squash(s):
+        mag_sq = torch.sum(s**2, dim=2, keepdim=True)
+        mag = torch.sqrt(mag_sq)
+        s = (mag_sq / (1.0 + mag_sq)) * (s / mag)
+        return s
+
+    def forward(self, x):
+        u = [self.units[i](x) for i in range(self.num_units)]
+        u = torch.stack(u, dim=1)
+        u = u.view(x.size(0), self.num_units, -1)
+        return PrimaryCapsuleLayer.squash(u)
+
+
+class SecondaryCapsuleLayer(torch.nn.Module):
+
+    def __init__(self, in_units, in_channels, num_units, unit_size):
+        super(SecondaryCapsuleLayer, self).__init__()
+
+        self.in_units = in_units
+        self.in_channels = in_channels
+        self.num_units = num_units
+        self.W = torch.nn.Parameter(torch.randn(1, in_channels, num_units, unit_size, in_units))
+
+    @staticmethod
+    def squash(s):
+        mag_sq = torch.sum(s**2, dim=2, keepdim=True)
+        mag = torch.sqrt(mag_sq)
+        s = (mag_sq / (1.0 + mag_sq)) * (s / mag)
+        return s
+
+    def forward(self, x):
+        batch_size = x.size(0)
+
+        # (batch, in_units, features) -> (batch, features, in_units)
+        x = x.transpose(1, 2)
+
+        # (batch, features, in_units) -> (batch, features, num_units, in_units, 1)
+        x = torch.stack([x] * self.num_units, dim=2).unsqueeze(4)
+
+        # (batch, features, in_units, unit_size, num_units)
+        W = torch.cat([self.W] * batch_size, dim=0)
+
+        # Transform inputs by weight matrix.
+        # (batch_size, features, num_units, unit_size, 1)
+        u_hat = torch.matmul(W, x)
+
+        # Initialize routing logits to zero.
+        b_ij = Variable(torch.zeros(1, self.in_channels, self.num_units, 1))
+
+        # Iterative routing.
+        num_iterations = 3
+        for iteration in range(num_iterations):
+            # Convert routing logits to softmax.
+            # (batch, features, num_units, 1, 1)
+            c_ij = torch.nn.functional.softmax(b_ij,dim=0)
+            c_ij = torch.cat([c_ij] * batch_size, dim=0).unsqueeze(4)
+
+            # Apply routing (c_ij) to weighted inputs (u_hat).
+            # (batch_size, 1, num_units, unit_size, 1)
+            s_j = (c_ij * u_hat).sum(dim=1, keepdim=True)
+
+            # (batch_size, 1, num_units, unit_size, 1)
+            v_j = SecondaryCapsuleLayer.squash(s_j)
+
+            # (batch_size, features, num_units, unit_size, 1)
+            v_j1 = torch.cat([v_j] * self.in_channels, dim=1)
+
+            # (1, features, num_units, 1)
+            u_vj1 = torch.matmul(u_hat.transpose(3, 4), v_j1).squeeze(4).mean(dim=0, keepdim=True)
+
+            # Update b_ij (routing)
+            b_ij = b_ij + u_vj1
+
+        return v_j.squeeze(1)
+
+
+
+class Attention(torch.nn.Module):
+    def __init__(self, attention_size_1, attention_size_2):
+        super(Attention, self).__init__()
+        self.attention_1 = torch.nn.Linear(attention_size_1, attention_size_2)
+        self.attention_2 = torch.nn.Linear(attention_size_2, attention_size_1)
+
+    def forward(self, x_in):
+        attention_score_base = self.attention_1(x_in)
+        attention_score_base = torch.nn.functional.relu(attention_score_base)
+        attention_score = self.attention_2(attention_score_base)
+        attention_score = torch.nn.functional.softmax(attention_score,dim=0)
+        condensed_x = x_in *attention_score
+
+        return condensed_x
+
+def margin_loss(scores, target, loss_lambda):
+    batch_size = scores.size(0)
+
+    v_mag = torch.sqrt((scores**2).sum(dim=2, keepdim=True))
+
+
+    zero = Variable(torch.zeros(1))
+    m_plus = 0.9
+    m_minus = 0.1
+    max_l = torch.max(m_plus - v_mag, zero).view(batch_size, -1)**2
+    max_r = torch.max(v_mag - m_minus, zero).view(batch_size, -1)**2
+
+    T_c = target
+    L_c = T_c * max_l + loss_lambda * (1.0 - T_c) * max_r
+    L_c = L_c.sum(dim=1)
+
+    L_c = L_c.mean()
+
+    return L_c
+
+

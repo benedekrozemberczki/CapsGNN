@@ -6,7 +6,7 @@ from tqdm import tqdm, trange
 import numpy as np
 from utils import create_numeric_mapping
 from torch_geometric.nn import GCNConv
-from layers import ListModule
+from layers import ListModule, PrimaryCapsuleLayer, Attention, SecondaryCapsuleLayer, margin_loss
 import pandas as pd
 
 class CapsGNN(torch.nn.Module):
@@ -23,20 +23,33 @@ class CapsGNN(torch.nn.Module):
         for layer in range(self.args.gcn_layers-1):
             self.base_layers.append(GCNConv( self.args.gcn_filters, self.args.gcn_filters))
         self.base_layers = ListModule(*self.base_layers)
-        self.out = torch.nn.Linear(self.args.gcn_filters, self.number_of_targets)
+        self.first_capsule = PrimaryCapsuleLayer(self.args.gcn_filters, self.args.gcn_layers, self.args.gcn_layers, self.args.capsule_dimensions)
+        self.attention = Attention(self.args.gcn_layers* self.args.gcn_filters*self.args.capsule_dimensions, self.args.inner_attention_dimension)
+        self.graph_capsule =  SecondaryCapsuleLayer(self.args.gcn_layers*self.args.gcn_filters, self.args.capsule_dimensions, self.args.number_of_capsules, self.args.capsule_dimensions)
+        self.class_capsule =  SecondaryCapsuleLayer(self.args.capsule_dimensions,self.args.number_of_capsules, self.number_of_targets, self.args.capsule_dimensions)
 
     def forward(self, data):
         features = data["features"]
         edges = data["edges"]
         hidden_representations = []
         for layer in self.base_layers:
-            features = layer(features, edges)
+            features = torch.nn.functional.relu(layer(features, edges))
             hidden_representations.append(features)
-        features = torch.mean(features, dim = 0)
-        prediction = self.out(features)
-        prediction = torch.nn.functional.log_softmax(prediction, dim=0).view(1,-1)
 
-        return prediction
+        hidden_representations = torch.cat(tuple(hidden_representations))
+        hidden_representations = hidden_representations.view(1, self.args.gcn_layers, self.args.gcn_filters,-1)
+        first_capsule_output = self.first_capsule(hidden_representations)
+
+        first_capsule_output = first_capsule_output.view(-1,self.args.gcn_layers* self.args.gcn_filters*self.args.capsule_dimensions)
+        rescaled_capsule_output = self.attention(first_capsule_output)
+        rescaled_first_capsule_output = rescaled_capsule_output.view(-1, self.args.gcn_layers* self.args.gcn_filters, self.args.capsule_dimensions)
+        graph_capsule_output = self.graph_capsule(rescaled_first_capsule_output)
+        reshaped_graph_capsule_output = graph_capsule_output.view(-1, self.args.capsule_dimensions, self.args.number_of_capsules ) 
+        class_capsule_output = self.class_capsule(reshaped_graph_capsule_output)
+        class_capsule_output =  class_capsule_output.view(-1, self.number_of_targets*self.args.capsule_dimensions )
+        class_capsule_output = torch.mean(class_capsule_output,dim=0).view(1,self.number_of_targets,self.args.capsule_dimensions)
+        return class_capsule_output
+        
 
 class CapsGNNTrainer(object):
 
@@ -82,7 +95,7 @@ class CapsGNNTrainer(object):
 
 
     def create_target(self,data):
-        return torch.LongTensor([data["target"]])
+        return  torch.FloatTensor([0.0 if i != data["target"] else 1.0 for i in range(self.number_of_targets)])
 
     def create_edges(self,data):
         return torch.t(torch.LongTensor(data["edges"]))
@@ -120,7 +133,7 @@ class CapsGNNTrainer(object):
                 for path in batch:
                     data = self.create_input_data(path)
                     prediction = self.model(data)
-                    loss = torch.nn.functional.nll_loss(prediction, data["target"])
+                    loss = margin_loss(prediction, data["target"], self.args.lambd)
                     accumulated_losses = accumulated_losses + loss
                 accumulated_losses = accumulated_losses/len(path)
                 accumulated_losses.backward()
@@ -137,9 +150,12 @@ class CapsGNNTrainer(object):
         for path in tqdm(self.test_graph_paths):
             data = self.create_input_data(path)
             prediction = self.model(data)
-            prediction = torch.argmax(prediction).item()
+            prediction_mag = torch.sqrt((prediction**2).sum(dim=2))
+            _, prediction_max_index = prediction_mag.max(dim=1)
+            prediction = prediction_max_index.data.view(-1).item()
             self.predictions.append(prediction)
-            self.hits.append(prediction==data["target"])
+            self.hits.append(data["target"][prediction]==1.0)
+
         print("\nAccuracy: " + str(round(np.mean(self.hits),4)))
 
     def save_predictions(self):

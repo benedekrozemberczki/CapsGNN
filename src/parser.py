@@ -37,22 +37,43 @@ def parameter_parser():
 
     parser.add_argument("--gcn-filters",
                         type = int,
-                        default = 20,
+                        default = 2,
 	                help = "Discount for correct predictions. Default is 0.99.")
 
     parser.add_argument("--gcn-layers",
                         type = int,
-                        default = 2,
+                        default = 5,
+	                help = "Number of Graph Convolutional Layers. Default is 0.001.")
+
+    parser.add_argument("--inner-attention-dimension",
+                        type = int,
+                        default = 20,
+	                help = "Number of Graph Convolutional Layers. Default is 0.001.")
+
+    parser.add_argument("--capsule-dimensions",
+                        type = int,
+                        default = 7,
+	                help = "Number of Graph Convolutional Layers. Default is 0.001.")
+
+    parser.add_argument("--number-of-capsules",
+                        type = int,
+                        default = 5,
 	                help = "Number of Graph Convolutional Layers. Default is 0.001.")
 
     parser.add_argument("--weight-decay",
                         type = float,
-                        default = 10**-5,
+                        default = 10**-6,
 	                help = "Learning rate. Default is 10^-5.")
 
     parser.add_argument("--learning-rate",
                         type = float,
                         default = 0.01,
 	                help = "Learning rate. Default is 10^-5.")
+
+    parser.add_argument("--lambd",
+                        type = float,
+                        default = 1.0,
+	                help = "Learning rate. Default is 10^-5.")
+    
     
     return parser.parse_args()
