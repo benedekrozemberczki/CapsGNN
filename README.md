@@ -76,7 +76,7 @@ Training a CapsGNNN model for a 100 epochs.
 ```
 python src/main.py --epochs 100
 ```
-Increasing the number of walks and the walk length.
+Changing the batch size.
 ```
-python src/main.py --number-of-walks 20 --walk-length 80
+python src/main.py --batchs-size 128
 ```
