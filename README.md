@@ -60,13 +60,8 @@ Training a CapsGNN model is handled by the `src/main.py` script which provides t
 #### Model options
 ```
   --number of walks    INT     Number of random walks per node.   Default is 10.
-  --window-size        INT     Skip-gram window size.             Default is 5.
-  --negative-samples   INT     Number of negative samples.        Default is 5.
-  --walk-length        INT     Random walk length.                Default is 40.
   --lambd              FLOAT   Regularization parameter.          Default is 0.1
-  --dimensions         INT     Number of embedding dimensions.    Default is 128.
-  --workers            INT     Number of cores for pre-training.  Default is 4.   
-  --learning-rate      FLOAT   SGD learning rate.                 Default is 0.025
+  --learning-rate      FLOAT   Adam learning rate.                 Default is 0.025
 ```
 ### Examples
 The following commands learn a model and save the predictions. Training a model on the default dataset:
