@@ -118,23 +118,19 @@ class Attention(torch.nn.Module):
         return condensed_x
 
 def margin_loss(scores, target, loss_lambda):
+    """
+    """
     batch_size = scores.size(0)
-
     v_mag = torch.sqrt((scores**2).sum(dim=2, keepdim=True))
-
-
     zero = Variable(torch.zeros(1))
     m_plus = 0.9
     m_minus = 0.1
     max_l = torch.max(m_plus - v_mag, zero).view(batch_size, -1)**2
     max_r = torch.max(v_mag - m_minus, zero).view(batch_size, -1)**2
-
     T_c = target
     L_c = T_c * max_l + loss_lambda * (1.0 - T_c) * max_r
     L_c = L_c.sum(dim=1)
-
     L_c = L_c.mean()
-
     return L_c
 
 
