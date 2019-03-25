@@ -6,7 +6,7 @@ def parameter_parser():
     The default hyperparameters give good results without cross-validation.
     """
 
-    parser = argparse.ArgumentParser(description = "Run GAM.")
+    parser = argparse.ArgumentParser(description = "Run CapsGNN.")
 	
     parser.add_argument("--train-graph-folder",
                         nargs = "?",
