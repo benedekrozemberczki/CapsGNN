@@ -36,12 +36,12 @@ def parameter_parser():
     parser.add_argument("--gcn-filters",
                         type = int,
                         default = 2,
-	                help = "Number of GCN filters. Default is 2.")
+	                help = "Number of Graph Convolutional filters. Default is 2.")
 
     parser.add_argument("--gcn-layers",
                         type = int,
                         default = 5,
-	                help = "Number of Graph Convolutional Layers. Default is 0.001.")
+	                help = "Number of Graph Convolutional Layers. Default is 5.")
 
     parser.add_argument("--inner-attention-dimension",
                         type = int,
