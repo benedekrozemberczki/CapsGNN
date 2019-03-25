@@ -135,7 +135,7 @@ class CapsGNNTrainer(object):
                     prediction = self.model(data)
                     loss = margin_loss(prediction, data["target"], self.args.lambd)
                     accumulated_losses = accumulated_losses + loss
-                accumulated_losses = accumulated_losses/len(path)
+                accumulated_losses = accumulated_losses/len(batch)
                 accumulated_losses.backward()
                 optimizer.step()
                 losses = losses+accumulated_losses.item()
