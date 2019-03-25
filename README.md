@@ -33,20 +33,28 @@ torch-geometric   1.0.3
 torchvision       0.2.1
 ```
 ### Datasets
-The code takes the **edge list** of the graph in a csv file. Every row indicates an edge between two nodes separated by a comma. The first row is a header. Nodes should be indexed starting with 0. A sample graph for `Cora` is included in the  `input/` directory.
+The code takes graphs for training from an input folder where each graph is stored as a JSON. Graphs used for testing are also stored as JSON files. Every node id and node label has to be indexed from 0. Keys of dictionaries are stored strings in order to make JSON serialization possible.
+
+Every JSON file has the following key-value structure:
+
+```javascript
+{"edges": [[0, 1],[1, 2],[2, 3],[3, 4]],
+ "labels": {"0": "A", "1": "B", "2": "C", "3": "A", "4": "B"},
+ "target": 1}
+```
+The **edges** key has an edge list value which descibes the connectivity structure. The **labels** key has labels for each node which are stored as a dictionary -- within this nested dictionary labels are values, node identifiers are keys. The **target** key has an integer value which is the class membership.
 
 ### Outputs
 
 The embeddings are saved in the `input/` directory. Each embedding has a header and a column with the node IDs. Finally, the node embedding is sorted by the node ID column.
 
 ### Options
-The training of a Splitter embedding is handled by the `src/main.py` script which provides the following command line arguments.
+Training a CapsGNN model is handled by the `src/main.py` script which provides the following command line arguments.
 
 #### Input and output options
 ```
-  --edge-path               STR    Edge list csv.           Default is `input/chameleon_edges.csv`.
-  --embedding-output-path   STR    Embedding output csv.    Default is `output/chameleon_embedding.csv`.
-  --persona-output-path     STR    Persona mapping JSON.    Default is `output/chameleon_personas.json`.
+  --training-graphs   STR    Training graphs folder.      Default is `dataset/train/`.
+  --testing-graphs    STR    Testing graphs folder.       Default is `dataset/test/`.
 ```
 #### Model options
 ```
