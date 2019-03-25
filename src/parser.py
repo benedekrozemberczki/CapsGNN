@@ -46,12 +46,12 @@ def parameter_parser():
     parser.add_argument("--inner-attention-dimension",
                         type = int,
                         default = 20,
-	                help = "Number of Graph Convolutional Layers. Default is 0.001.")
+	                help = "Number of Attention Neurons. Default is 20.")
 
     parser.add_argument("--capsule-dimensions",
                         type = int,
-                        default = 7,
-	                help = "Number of Graph Convolutional Layers. Default is 0.001.")
+                        default = 8,
+	                help = "Capsule dimensions. Default is 8.")
 
     parser.add_argument("--number-of-capsules",
                         type = int,
