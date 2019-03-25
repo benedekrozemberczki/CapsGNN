@@ -36,7 +36,7 @@ def parameter_parser():
     parser.add_argument("--gcn-filters",
                         type = int,
                         default = 2,
-	                help = "Discount for correct predictions. Default is 0.99.")
+	                help = "Number of GCN filters. Default is 2.")
 
     parser.add_argument("--gcn-layers",
                         type = int,
