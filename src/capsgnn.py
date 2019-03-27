@@ -5,8 +5,8 @@ import random
 import numpy as np
 import pandas as pd
 from tqdm import tqdm, trange
-from utils import create_numeric_mapping
 from torch_geometric.nn import GCNConv
+from utils import create_numeric_mapping
 from layers import ListModule, PrimaryCapsuleLayer, Attention, SecondaryCapsuleLayer, margin_loss
 
 class CapsGNN(torch.nn.Module):
