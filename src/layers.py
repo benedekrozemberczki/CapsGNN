@@ -60,6 +60,11 @@ class PrimaryCapsuleLayer(torch.nn.Module):
 
     @staticmethod
     def squash(s):
+        """
+        Squash activations.
+        :param s: Signal.
+        :return s: Activated signal.
+        """
         mag_sq = torch.sum(s**2, dim=2, keepdim=True)
         mag = torch.sqrt(mag_sq)
         s = (mag_sq / (1.0 + mag_sq)) * (s / mag)
