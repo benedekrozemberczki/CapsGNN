@@ -188,6 +188,9 @@ class CapsGNNTrainer(object):
                 self.steps.set_description("CapsGNN (Loss=%g)" % round(average_loss,4))
 
     def score(self):
+        """
+        Scoring on the test set.
+        """
         print("\n\nScoring.\n")
         self.model.eval()
         self.predictions = []
