@@ -112,6 +112,11 @@ class SecondaryCapsuleLayer(torch.nn.Module):
         return s
 
     def forward(self, x):
+        """
+        Forward propagation pass.
+        :param x: Input features.
+        :return : Capsule output.
+        """
         batch_size = x.size(0)
         x = x.transpose(1, 2)
         x = torch.stack([x] * self.num_units, dim=2).unsqueeze(4)
@@ -128,7 +133,6 @@ class SecondaryCapsuleLayer(torch.nn.Module):
             v_j1 = torch.cat([v_j] * self.in_channels, dim=1)
             u_vj1 = torch.matmul(u_hat.transpose(3, 4), v_j1).squeeze(4).mean(dim=0, keepdim=True)
             b_ij = b_ij + u_vj1
-
         return v_j.squeeze(1)
 
 
