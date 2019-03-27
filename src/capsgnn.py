@@ -11,10 +11,16 @@ from layers import ListModule, PrimaryCapsuleLayer, Attention, SecondaryCapsuleL
 
 class CapsGNN(torch.nn.Module):
     """
-    
+    An implementation of themodel described in the following paper:
+    https://openreview.net/forum?id=Byl8BnRcYm
     """
     def __init__(self, args, number_of_features, number_of_targets):
         super(CapsGNN, self).__init__()
+        """
+        :param args:
+        :param number_of_features:
+        :param number_of_targets: Number of classes.
+        """
         self.args = args
         self.number_of_features = number_of_features
         self.number_of_targets = number_of_targets
