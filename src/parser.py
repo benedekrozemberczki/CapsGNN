@@ -29,8 +29,8 @@ def parameter_parser():
 
     parser.add_argument("--batch-size",
                         type = int,
-                        default = 32,
-	                help = "Number of graphs processed per batch. Default is 32.")
+                        default = 8,
+	                help = "Number of graphs processed per batch. Default is 8.")
 
     parser.add_argument("--gcn-filters",
                         type = int,
