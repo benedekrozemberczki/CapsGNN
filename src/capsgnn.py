@@ -154,6 +154,9 @@ class CapsGNNTrainer(object):
         return features
 
     def create_input_data(self, path):
+        """
+        Creating a data dictionary with Torch tensors.
+        """
         data = json.load(open(path))
         target = self.create_target(data)
         edges = self.create_edges(data)
