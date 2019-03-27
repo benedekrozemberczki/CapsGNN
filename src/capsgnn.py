@@ -121,14 +121,25 @@ class CapsGNNTrainer(object):
         """
         self.batches = [self.train_graph_paths[i:i + self.args.batch_size] for i in range(0,len(self.train_graph_paths), self.args.batch_size)]
 
-    def create_data_dictionary(self,target, edges, features):
+    def create_data_dictionary(self, target, edges, features):
+        """
+        Creating a data dictionary.
+        :param target: Target vector.
+        :param edges: Edge list tensor.
+        :param features: Feature tensor.
+        """
         to_pass_forward = dict()
         to_pass_forward["target"] = target
         to_pass_forward["edges"] = edges
         to_pass_forward["features"] = features
         return to_pass_forward
 
-    def create_target(self,data):
+    def create_target(self, data):
+        """
+        Target createn based on data dicionary.
+        :param data: Data dictionary.
+        :return : Target vector.
+        """
         return  torch.FloatTensor([0.0 if i != data["target"] else 1.0 for i in range(self.number_of_targets)])
 
     def create_edges(self,data):
