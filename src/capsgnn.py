@@ -9,7 +9,6 @@ from utils import create_numeric_mapping
 from torch_geometric.nn import GCNConv
 from layers import ListModule, PrimaryCapsuleLayer, Attention, SecondaryCapsuleLayer, margin_loss
 
-
 class CapsGNN(torch.nn.Module):
     """
     
