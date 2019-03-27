@@ -40,7 +40,8 @@ class ListModule(torch.nn.Module):
 
 class PrimaryCapsuleLayer(torch.nn.Module):
     """
-    https://github.com/timomernick/pytorch-capsule
+    Primary Convolutional capsule layer class based on:
+    https://github.com/timomernick/pytorch-capsule.
     """
     def __init__(self, in_units, in_channels, num_units, capsule_dimensions):
         super(PrimaryCapsuleLayer, self).__init__()
@@ -68,6 +69,7 @@ class PrimaryCapsuleLayer(torch.nn.Module):
 
 class SecondaryCapsuleLayer(torch.nn.Module):
     """
+    Secondary Convolutional capsule layer class based on
     https://github.com/timomernick/pytorch-capsule
     """
 
