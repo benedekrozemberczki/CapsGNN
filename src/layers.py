@@ -136,8 +136,6 @@ class SecondaryCapsuleLayer(torch.nn.Module):
             b_ij = b_ij + u_vj1
         return v_j.squeeze(1)
 
-
-
 class Attention(torch.nn.Module):
     """
     2 Layer Attention Module.
