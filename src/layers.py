@@ -71,11 +71,15 @@ class PrimaryCapsuleLayer(torch.nn.Module):
         return s
 
     def forward(self, x):
+        """
+        Forward propgataion pass.
+        :param x: Input features.
+        :return : Primary capsule features.
+        """
         u = [self.units[i](x) for i in range(self.num_units)]
         u = torch.stack(u, dim=1)
         u = u.view(x.size(0), self.num_units, -1)
         return PrimaryCapsuleLayer.squash(u)
-
 
 class SecondaryCapsuleLayer(torch.nn.Module):
     """
