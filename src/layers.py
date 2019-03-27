@@ -45,7 +45,12 @@ class PrimaryCapsuleLayer(torch.nn.Module):
     """
     def __init__(self, in_units, in_channels, num_units, capsule_dimensions):
         super(PrimaryCapsuleLayer, self).__init__()
-
+        """
+        :param in_units: Number of input units (GCN layers).
+        :param in_channels: Number of channels.
+        :param num_units: Number of capsules.
+        :param capsule_dimensions: Number of neurons in capsule.
+        """
         self.num_units = num_units
         self.units = []
         for i in range(self.num_units):
@@ -69,13 +74,17 @@ class PrimaryCapsuleLayer(torch.nn.Module):
 
 class SecondaryCapsuleLayer(torch.nn.Module):
     """
-    Secondary Convolutional Capsule Layer class based on
+    Secondary Convolutional Capsule Layer class based on this repostory:
     https://github.com/timomernick/pytorch-capsule
     """
-
     def __init__(self, in_units, in_channels, num_units, unit_size):
         super(SecondaryCapsuleLayer, self).__init__()
-
+        """
+        :param in_units: Number of input units (GCN layers).
+        :param in_channels: Number of channels.
+        :param num_units: Number of capsules.
+        :param capsule_dimensions: Number of neurons in capsule.
+        """
         self.in_units = in_units
         self.in_channels = in_channels
         self.num_units = num_units
