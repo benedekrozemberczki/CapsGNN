@@ -62,7 +62,7 @@ Training a CapsGNN model is handled by the `src/main.py` script which provides t
 #### Model options
 ```
   --epochs                      INT     Number of epochs.                  Default is 10.
-  --batch-size                  INT     Number fo graphs per batch.        Default is 32.
+  --batch-size                  INT     Number fo graphs per batch.        Default is 8.
   --gcn-filters                 INT     Number of filters in GCNs.         Default is 2.
   --gcn-layers                  INT     Number of GCNs chained together.   Default is 5.
   --inner-attention-dimension   INT     Number of neurons in attention.    Default is 20.  
