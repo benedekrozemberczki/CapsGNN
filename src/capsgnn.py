@@ -117,7 +117,7 @@ class CapsGNNTrainer(object):
 
     def create_batches(self):
         """
-        Batching the graphs fro training.
+        Batching the graphs for training.
         """
         self.batches = [self.train_graph_paths[i:i + self.args.batch_size] for i in range(0,len(self.train_graph_paths), self.args.batch_size)]
 
@@ -127,7 +127,6 @@ class CapsGNNTrainer(object):
         to_pass_forward["edges"] = edges
         to_pass_forward["features"] = features
         return to_pass_forward
-
 
     def create_target(self,data):
         return  torch.FloatTensor([0.0 if i != data["target"] else 1.0 for i in range(self.number_of_targets)])
