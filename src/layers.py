@@ -138,6 +138,10 @@ class SecondaryCapsuleLayer(torch.nn.Module):
 
 
 class Attention(torch.nn.Module):
+    """
+    2 Layer Attention Module.
+    See the CapsGNN paper for details.
+    """
     def __init__(self, attention_size_1, attention_size_2):
         super(Attention, self).__init__()
         self.attention_1 = torch.nn.Linear(attention_size_1, attention_size_2)
