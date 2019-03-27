@@ -29,9 +29,15 @@ class CapsGNN(torch.nn.Module):
         self.class_capsule =  SecondaryCapsuleLayer(self.args.capsule_dimensions,self.args.number_of_capsules, self.number_of_targets, self.args.capsule_dimensions)
 
     def forward(self, data):
+        """
+        Forward propagation pass.
+        :param data: Dictionary of tensors with features and edges.
+        :return class_capsule_output: Class capsule outputs.
+        """
         features = data["features"]
         edges = data["edges"]
         hidden_representations = []
+        
         for layer in self.base_layers:
             features = torch.nn.functional.relu(layer(features, edges))
             hidden_representations.append(features)
@@ -39,7 +45,6 @@ class CapsGNN(torch.nn.Module):
         hidden_representations = torch.cat(tuple(hidden_representations))
         hidden_representations = hidden_representations.view(1, self.args.gcn_layers, self.args.gcn_filters,-1)
         first_capsule_output = self.first_capsule(hidden_representations)
-
         first_capsule_output = first_capsule_output.view(-1,self.args.gcn_layers* self.args.gcn_filters*self.args.capsule_dimensions)
         rescaled_capsule_output = self.attention(first_capsule_output)
         rescaled_first_capsule_output = rescaled_capsule_output.view(-1, self.args.gcn_layers* self.args.gcn_filters, self.args.capsule_dimensions)
