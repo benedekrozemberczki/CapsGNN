@@ -4,10 +4,11 @@ import json
 import random
 from tqdm import tqdm, trange
 import numpy as np
+import pandas as pd
 from utils import create_numeric_mapping
 from torch_geometric.nn import GCNConv
 from layers import ListModule, PrimaryCapsuleLayer, Attention, SecondaryCapsuleLayer, margin_loss
-import pandas as pd
+
 
 class CapsGNN(torch.nn.Module):
     """
