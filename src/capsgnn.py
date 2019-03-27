@@ -10,7 +10,9 @@ from layers import ListModule, PrimaryCapsuleLayer, Attention, SecondaryCapsuleL
 import pandas as pd
 
 class CapsGNN(torch.nn.Module):
-
+    """
+    
+    """
     def __init__(self, args, number_of_features, number_of_targets):
         super(CapsGNN, self).__init__()
         self.args = args
