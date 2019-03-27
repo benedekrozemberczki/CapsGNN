@@ -154,7 +154,12 @@ class Attention(torch.nn.Module):
 
 def margin_loss(scores, target, loss_lambda):
     """
+    The margin loss from the original paper. Based on:
     https://github.com/timomernick/pytorch-capsule
+    :param scores: Capsule scores.
+    :param target: Target groundtruth.
+    :param loss_lambda: Regularization parameter.
+    :return L_c: Classification loss.
     """
     batch_size = scores.size(0)
     v_mag = torch.sqrt((scores**2).sum(dim=2, keepdim=True))
