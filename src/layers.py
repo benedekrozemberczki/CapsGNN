@@ -173,5 +173,3 @@ def margin_loss(scores, target, loss_lambda):
     L_c = L_c.sum(dim=1)
     L_c = L_c.mean()
     return L_c
-
-
