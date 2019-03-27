@@ -156,6 +156,8 @@ class CapsGNNTrainer(object):
     def create_input_data(self, path):
         """
         Creating a data dictionary with Torch tensors.
+        :param path: path to the data JSON.
+        :return to_pass_forward: Data dictionary.
         """
         data = json.load(open(path))
         target = self.create_target(data)
