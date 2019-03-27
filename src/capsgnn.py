@@ -27,6 +27,14 @@ class CapsGNN(torch.nn.Module):
         self._setup_layers()
 
     def _setup_layers(self):
+        """
+        Creating layers of model.
+        1. GCN layers.
+        2. Primary capsules.
+        3. Attention
+        4. Graph capsules.
+        4. Class capsules.
+        """
         self.base_layers = [GCNConv(self.number_of_features, self.args.gcn_filters)]
         for layer in range(self.args.gcn_layers-1):
             self.base_layers.append(GCNConv( self.args.gcn_filters, self.args.gcn_filters))
