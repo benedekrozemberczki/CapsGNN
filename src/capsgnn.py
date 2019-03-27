@@ -162,6 +162,9 @@ class CapsGNNTrainer(object):
         return to_pass_forward
 
     def fit(self):
+        """
+        Training a model on the training set.
+        """
         print("\nTraining started.\n")
         self.model.train()
         optimizer = torch.optim.Adam(self.model.parameters(), lr=self.args.learning_rate, weight_decay=self.args.weight_decay)
