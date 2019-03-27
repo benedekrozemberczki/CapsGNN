@@ -204,9 +204,11 @@ class CapsGNNTrainer(object):
         print("\nAccuracy: " + str(round(np.mean(self.hits),4)))
 
     def save_predictions(self):
+        """
+        Saving the test set predictions.
+        """
         identifiers = [path.split("/")[-1].strip(".json") for path in self.test_graph_paths]
         out = pd.DataFrame()
         out["id"] = identifiers
         out["predictions"] = self.predictions
         out.to_csv(self.args.prediction_path, index = None)
-
