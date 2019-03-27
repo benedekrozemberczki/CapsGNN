@@ -109,10 +109,16 @@ class CapsGNNTrainer(object):
         self.number_of_targets = len(self.target_map)
     
     def setup_model(self):
+        """
+        Enumerating labels and initializing a CapsGNN.
+        """
         self.enumerate_unique_labels_and_targets()
         self.model = CapsGNN(self.args, self.number_of_features, self.number_of_targets)
 
     def create_batches(self):
+        """
+        Batching the graphs fro training.
+        """
         self.batches = [self.train_graph_paths[i:i + self.args.batch_size] for i in range(0,len(self.train_graph_paths), self.args.batch_size)]
 
     def create_data_dictionary(self,target, edges, features):
