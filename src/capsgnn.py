@@ -17,8 +17,8 @@ class CapsGNN(torch.nn.Module):
     def __init__(self, args, number_of_features, number_of_targets):
         super(CapsGNN, self).__init__()
         """
-        :param args:
-        :param number_of_features:
+        :param args: Arguments object.
+        :param number_of_features: Number of vertex features.
         :param number_of_targets: Number of classes.
         """
         self.args = args
