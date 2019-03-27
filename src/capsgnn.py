@@ -143,9 +143,19 @@ class CapsGNNTrainer(object):
         return  torch.FloatTensor([0.0 if i != data["target"] else 1.0 for i in range(self.number_of_targets)])
 
     def create_edges(self,data):
+        """
+        Create an edge matrix.
+        :param data: Data dictionary.
+        :return : Edge matrix.
+        """
         return torch.t(torch.LongTensor(data["edges"]))
 
     def create_features(self,data):
+        """
+        Create feature matrix.
+        :param data: Data dictionary.
+        :return features: Matrix of features.
+        """
         features = np.zeros((len(data["labels"]), self.number_of_features))
         node_indices = [node for node in range(len(data["labels"]))]
         feature_indices = [self.feature_map[label] for label in data["labels"].values()] 
@@ -155,7 +165,7 @@ class CapsGNNTrainer(object):
 
     def create_input_data(self, path):
         """
-        Creating a data dictionary with Torch tensors.
+        Creating tensors and a data dictionary with Torch tensors.
         :param path: path to the data JSON.
         :return to_pass_forward: Data dictionary.
         """
