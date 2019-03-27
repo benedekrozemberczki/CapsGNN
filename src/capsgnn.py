@@ -73,12 +73,20 @@ class CapsGNN(torch.nn.Module):
         
 
 class CapsGNNTrainer(object):
-
+    """
+    CapsGNN training and scoring.
+    """
     def __init__(self,args):
+        """
+        :param args: Arguments object.
+        """
         self.args = args
         self.setup_model()
 
     def enumerate_unique_labels_and_targets(self):
+        """
+        Enumerating the features and targets in order to setup weights later.
+        """
         print("\nEnumerating feature and target values.\n")
         ending = "*.json"
 
