@@ -172,8 +172,8 @@ class CapsGNNTrainer(object):
                 accumulated_losses = accumulated_losses/len(batch)
                 accumulated_losses.backward()
                 optimizer.step()
-                losses = losses+accumulated_losses.item()
-                average_loss = losses/(step+1)
+                losses = losses + accumulated_losses.item()
+                average_loss = losses/(step + 1)
                 self.steps.set_description("CapsGNN (Loss=%g)" % round(average_loss,4))
 
     def score(self):
