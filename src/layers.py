@@ -144,6 +144,10 @@ class Attention(torch.nn.Module):
     """
     def __init__(self, attention_size_1, attention_size_2):
         super(Attention, self).__init__()
+        """
+        :param attention_size_1: Number of neurons in 1st attention layer.
+        :param attention_size_2: Number of neurons in 2nd attention layer.        
+        """
         self.attention_1 = torch.nn.Linear(attention_size_1, attention_size_2)
         self.attention_2 = torch.nn.Linear(attention_size_2, attention_size_1)
 
