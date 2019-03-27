@@ -125,6 +125,7 @@ class SecondaryCapsuleLayer(torch.nn.Module):
         b_ij = Variable(torch.zeros(1, self.in_channels, self.num_units, 1))
 
         num_iterations = 3
+        
         for iteration in range(num_iterations):
             c_ij = torch.nn.functional.softmax(b_ij,dim=0)
             c_ij = torch.cat([c_ij] * batch_size, dim=0).unsqueeze(4)
@@ -152,12 +153,16 @@ class Attention(torch.nn.Module):
         self.attention_2 = torch.nn.Linear(attention_size_2, attention_size_1)
 
     def forward(self, x_in):
+        """
+        Forward propagation pass.
+        :param x_in: Primary capsule output.
+        :param condensed_x: Attention normalized capsule output.
+        """
         attention_score_base = self.attention_1(x_in)
         attention_score_base = torch.nn.functional.relu(attention_score_base)
         attention_score = self.attention_2(attention_score_base)
         attention_score = torch.nn.functional.softmax(attention_score,dim=0)
         condensed_x = x_in *attention_score
-
         return condensed_x
 
 def margin_loss(scores, target, loss_lambda):
