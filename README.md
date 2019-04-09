@@ -1,5 +1,9 @@
 CapsGNN
 ============================================
+
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/capsule-graph-neural-network/graph-classification-imdb-m)](https://paperswithcode.com/sota/graph-classification-imdb-m?p=capsule-graph-neural-network)
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/capsule-graph-neural-network/graph-classification-proteins)](https://paperswithcode.com/sota/graph-classification-proteins?p=capsule-graph-neural-network)
+
 A PyTorch implementation of "Capsule Graph Neural Network" (ICLR 2019).
 <p align="center">
   <img width="800" src="CapsGNN.jpg">
