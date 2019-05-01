@@ -54,7 +54,7 @@ class PrimaryCapsuleLayer(torch.nn.Module):
         self.num_units = num_units
         self.units = []
         for i in range(self.num_units):
-            unit = torch.nn.Conv2d(in_channels=in_channels, out_channels=capsule_dimensions, kernel_size=(1,in_units), stride=1, bias=True)
+            unit = torch.nn.Conv1d(in_channels=in_channels, out_channels=capsule_dimensions, kernel_size=(in_units,1), stride=1, bias=True)
             self.add_module("unit_" + str(i), unit)
             self.units.append(unit)
 
@@ -81,6 +81,7 @@ class PrimaryCapsuleLayer(torch.nn.Module):
         u = u.view(x.size(0), self.num_units, -1)
         return PrimaryCapsuleLayer.squash(u)
 
+
 class SecondaryCapsuleLayer(torch.nn.Module):
     """
     Secondary Convolutional Capsule Layer class based on this repostory:
@@ -98,6 +99,7 @@ class SecondaryCapsuleLayer(torch.nn.Module):
         self.in_channels = in_channels
         self.num_units = num_units
         self.W = torch.nn.Parameter(torch.randn(1, in_channels, num_units, unit_size, in_units))
+
 
     @staticmethod
     def squash(s):
@@ -172,14 +174,15 @@ def margin_loss(scores, target, loss_lambda):
     :param loss_lambda: Regularization parameter.
     :return L_c: Classification loss.
     """
-    batch_size = scores.size(0)
-    v_mag = torch.sqrt((scores**2).sum(dim=2, keepdim=True))
+    scores = scores.squeeze()
+    v_mag = torch.sqrt((scores**2).sum(dim=1, keepdim=True))
     zero = Variable(torch.zeros(1))
     m_plus = 0.9
     m_minus = 0.1
-    max_l = torch.max(m_plus - v_mag, zero).view(batch_size, -1)**2
-    max_r = torch.max(v_mag - m_minus, zero).view(batch_size, -1)**2
-    T_c = target
+    max_l = torch.max(m_plus - v_mag, zero).view(1, -1)**2
+    max_r = torch.max(v_mag - m_minus, zero).view(1, -1)**2
+    T_c = Variable(torch.zeros(v_mag.shape))
+    T_c =  target
     L_c = T_c * max_l + loss_lambda * (1.0 - T_c) * max_r
     L_c = L_c.sum(dim=1)
     L_c = L_c.mean()
