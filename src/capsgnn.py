@@ -60,6 +60,9 @@ class CapsGNN(torch.nn.Module):
         self.class_capsule =  SecondaryCapsuleLayer(self.args.capsule_dimensions,self.args.number_of_capsules, self.number_of_targets, self.args.capsule_dimensions)
 
     def _setup_reconstruction_layers(self):
+        """
+        Creating histogram reconstruction layers.
+        """
         self.reconstruction_layer_1 = torch.nn.Linear(self.number_of_targets*self.args.capsule_dimensions, int((self.number_of_features * 2) / 3))
         self.reconstruction_layer_2 = torch.nn.Linear(int((self.number_of_features * 2) / 3), int((self.number_of_features * 3) / 2))
         self.reconstruction_layer_3 = torch.nn.Linear(int((self.number_of_features * 3) / 2), self.number_of_features)
