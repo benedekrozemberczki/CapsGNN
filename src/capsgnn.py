@@ -39,19 +39,19 @@ class CapsGNN(torch.nn.Module):
         """
         Creating primary capsules.
         """
-        self.first_capsule = PrimaryCapsuleLayer(self.args.gcn_filters, self.args.gcn_layers, self.args.gcn_layers, self.args.capsule_dimensions)
+        self.first_capsule = PrimaryCapsuleLayer(in_units = self.args.gcn_filters, in_channels = self.args.gcn_layers, num_units = self.args.gcn_layers, capsule_dimensions = self.args.capsule_dimensions)
 
     def _setup_attention(self):
         """
         Creating attention layer.
         """
-        self.attention = Attention(self.args.gcn_layers* self.args.gcn_filters*self.args.capsule_dimensions, self.args.inner_attention_dimension)
+        self.attention = Attention(self.args.gcn_layers* self.args.capsule_dimensions, self.args.inner_attention_dimension)
 
     def _setup_graph_capsules(self):
         """
         Creating graph capsules.
         """
-        self.graph_capsule = SecondaryCapsuleLayer(self.args.gcn_layers*self.args.gcn_filters, self.args.capsule_dimensions, self.args.number_of_capsules, self.args.capsule_dimensions)
+        self.graph_capsule = SecondaryCapsuleLayer(self.args.gcn_layers, self.args.capsule_dimensions, self.args.number_of_capsules, self.args.capsule_dimensions)
 
     def _setup_class_capsule(self):
         """
@@ -127,11 +127,11 @@ class CapsGNN(torch.nn.Module):
             hidden_representations.append(features)
 
         hidden_representations = torch.cat(tuple(hidden_representations))
-        hidden_representations = hidden_representations.view(1, self.args.gcn_layers, -1,self.args.gcn_filters).permute(0,1,3,2)
+        hidden_representations = hidden_representations.view(1, self.args.gcn_layers, self.args.gcn_filters,-1)
         first_capsule_output = self.first_capsule(hidden_representations)
-        first_capsule_output = first_capsule_output.view(-1,self.args.gcn_layers* self.args.gcn_filters*self.args.capsule_dimensions)
+        first_capsule_output = first_capsule_output.view(-1,self.args.gcn_layers* self.args.capsule_dimensions)
         rescaled_capsule_output = self.attention(first_capsule_output)
-        rescaled_first_capsule_output = rescaled_capsule_output.view(-1, self.args.gcn_layers* self.args.gcn_filters, self.args.capsule_dimensions)
+        rescaled_first_capsule_output = rescaled_capsule_output.view(-1, self.args.gcn_layers, self.args.capsule_dimensions)
         graph_capsule_output = self.graph_capsule(rescaled_first_capsule_output)
         reshaped_graph_capsule_output = graph_capsule_output.view(-1, self.args.capsule_dimensions, self.args.number_of_capsules ) 
         class_capsule_output = self.class_capsule(reshaped_graph_capsule_output)
