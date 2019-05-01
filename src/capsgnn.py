@@ -87,9 +87,9 @@ class CapsGNN(torch.nn.Module):
     def calculate_reconstruction_loss(self, capsule_input, features):
         """
         Calculating the reconstruction loss of the model.
-        :param capsule_input:
-        :param features:
-        :return reconstrcution_loss:
+        :param capsule_input: Output of class capsule.
+        :param features: Feature matrix.
+        :return reconstrcution_loss: Loss of reconstruction.
         """
 
         v_mag = torch.sqrt((capsule_input**2).sum(dim=1))
