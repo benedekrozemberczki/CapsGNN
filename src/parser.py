@@ -75,6 +75,6 @@ def parameter_parser():
     parser.add_argument("--theta",
                         type = float,
                         default = 0.005,
-	                help = "Loss combination weight. Default is 1.0.")
+	                help = "Reconstruction loss weight. Default is 0.005.")
     
     return parser.parse_args()
