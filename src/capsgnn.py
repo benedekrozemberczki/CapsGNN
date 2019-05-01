@@ -76,6 +76,7 @@ class CapsGNN(torch.nn.Module):
         3. Attention
         4. Graph capsules.
         5. Class capsules.
+        6. Reconstruction layers.
         """
         self._setup_base_layers()
         self._setup_primary_capsules()
