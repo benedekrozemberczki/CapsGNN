@@ -61,16 +61,16 @@ Training a CapsGNN model is handled by the `src/main.py` script which provides t
 ```
 #### Model options
 ```
-  --epochs                      INT     Number of epochs.                  Default is 10.
-  --batch-size                  INT     Number fo graphs per batch.        Default is 8.
-  --gcn-filters                 INT     Number of filters in GCNs.         Default is 2.
-  --gcn-layers                  INT     Number of GCNs chained together.   Default is 5.
+  --epochs                      INT     Number of epochs.                  Default is 100.
+  --batch-size                  INT     Number fo graphs per batch.        Default is 32.
+  --gcn-filters                 INT     Number of filters in GCNs.         Default is 20.
+  --gcn-layers                  INT     Number of GCNs chained together.   Default is 2.
   --inner-attention-dimension   INT     Number of neurons in attention.    Default is 20.  
   --capsule-dimensions          INT     Number of capsule neurons.         Default is 8.
   --number-of-capsules          INT     Number of capsules in layer.       Default is 8.
   --weight-decay                FLOAT   Weight decay of Adam.              Defatuls is 10^-6.
-  --lambd                       FLOAT   Regularization parameter.          Default is 1.0.
-  --theta                       FLOAT   Reconstruction loss weight.        Default is 0.005.
+  --lambd                       FLOAT   Regularization parameter.          Default is 0.5.
+  --theta                       FLOAT   Reconstruction loss weight.        Default is 0.1.
   --learning-rate               FLOAT   Adam learning rate.                Default is 0.01.
 ```
 ### Examples
