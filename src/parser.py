@@ -24,13 +24,13 @@ def parameter_parser():
 
     parser.add_argument("--epochs",
                         type = int,
-                        default = 10,
-	                help = "Number of training epochs. Default is 10.")
+                        default = 100,
+	                help = "Number of training epochs. Default is 100.")
 
     parser.add_argument("--batch-size",
                         type = int,
-                        default = 8,
-	                help = "Number of graphs processed per batch. Default is 8.")
+                        default = 32,
+	                help = "Number of graphs processed per batch. Default is 32.")
 
     parser.add_argument("--gcn-filters",
                         type = int,
@@ -64,17 +64,17 @@ def parameter_parser():
 
     parser.add_argument("--learning-rate",
                         type = float,
-                        default = 0.01,
+                        default = 0.001,
 	                help = "Learning rate. Default is 0.01.")
 
     parser.add_argument("--lambd",
                         type = float,
-                        default = 1.0,
-	                help = "Loss combination weight. Default is 1.0.")
+                        default = 0.5,
+	                help = "Loss combination weight. Default is 0.5.")
 
     parser.add_argument("--theta",
                         type = float,
-                        default = 0.005,
-	                help = "Reconstruction loss weight. Default is 0.005.")
+                        default = 0.1,
+	                help = "Reconstruction loss weight. Default is 0.1.")
     
     return parser.parse_args()
