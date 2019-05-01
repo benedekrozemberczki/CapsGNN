@@ -29,7 +29,7 @@ def parameter_parser():
 
     parser.add_argument("--batch-size",
                         type = int,
-                        default = 8,
+                        default = 32,
 	                help = "Number of graphs processed per batch. Default is 8.")
 
     parser.add_argument("--gcn-filters",
@@ -70,6 +70,11 @@ def parameter_parser():
     parser.add_argument("--lambd",
                         type = float,
                         default = 1.0,
+	                help = "Loss combination weight. Default is 1.0.")
+
+    parser.add_argument("--theta",
+                        type = float,
+                        default = 0.005,
 	                help = "Loss combination weight. Default is 1.0.")
     
     return parser.parse_args()

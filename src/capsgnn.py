@@ -26,6 +26,30 @@ class CapsGNN(torch.nn.Module):
         self.number_of_targets = number_of_targets
         self._setup_layers()
 
+    def _setup_base_layers(self):
+        self.base_layers = [GCNConv(self.number_of_features, self.args.gcn_filters)]
+        for layer in range(self.args.gcn_layers-1):
+            self.base_layers.append(GCNConv( self.args.gcn_filters, self.args.gcn_filters))
+        self.base_layers = ListModule(*self.base_layers)
+
+    def _setup_primary_capsules(self):
+        self.first_capsule = PrimaryCapsuleLayer(self.args.gcn_filters, self.args.gcn_layers, self.args.gcn_layers, self.args.capsule_dimensions)
+
+    def _setup_attention(self):
+        self.attention = Attention(self.args.gcn_layers* self.args.gcn_filters*self.args.capsule_dimensions, self.args.inner_attention_dimension)
+
+    def _setup_graph_capsules(self):
+        self.graph_capsule = SecondaryCapsuleLayer(self.args.gcn_layers*self.args.gcn_filters, self.args.capsule_dimensions, self.args.number_of_capsules, self.args.capsule_dimensions)
+
+    def _setup_class_capsule(self):
+        self.class_capsule =  SecondaryCapsuleLayer(self.args.capsule_dimensions,self.args.number_of_capsules, self.number_of_targets, self.args.capsule_dimensions)
+
+    def _setup_reconstruction_layers(self):
+        self.reconstruction_layer_1 = torch.nn.Linear(self.number_of_targets*self.args.capsule_dimensions, int((self.number_of_features * 2) / 3))
+        self.reconstruction_layer_2 = torch.nn.Linear(int((self.number_of_features * 2) / 3), int((self.number_of_features * 3) / 2))
+        self.reconstruction_layer_3 = torch.nn.Linear(int((self.number_of_features * 3) / 2), self.number_of_features)
+
+
     def _setup_layers(self):
         """
         Creating layers of model.
@@ -35,14 +59,37 @@ class CapsGNN(torch.nn.Module):
         4. Graph capsules.
         5. Class capsules.
         """
-        self.base_layers = [GCNConv(self.number_of_features, self.args.gcn_filters)]
-        for layer in range(self.args.gcn_layers-1):
-            self.base_layers.append(GCNConv( self.args.gcn_filters, self.args.gcn_filters))
-        self.base_layers = ListModule(*self.base_layers)
-        self.first_capsule = PrimaryCapsuleLayer(self.args.gcn_filters, self.args.gcn_layers, self.args.gcn_layers, self.args.capsule_dimensions)
-        self.attention = Attention(self.args.gcn_layers* self.args.gcn_filters*self.args.capsule_dimensions, self.args.inner_attention_dimension)
-        self.graph_capsule =  SecondaryCapsuleLayer(self.args.gcn_layers*self.args.gcn_filters, self.args.capsule_dimensions, self.args.number_of_capsules, self.args.capsule_dimensions)
-        self.class_capsule =  SecondaryCapsuleLayer(self.args.capsule_dimensions,self.args.number_of_capsules, self.number_of_targets, self.args.capsule_dimensions)
+        self._setup_base_layers()
+        self._setup_primary_capsules()
+        self._setup_attention()
+        self._setup_graph_capsules()
+        self._setup_class_capsule()
+        self._setup_reconstruction_layers()
+
+    def calculate_reconstruction_loss(self, capsule_input, features):
+
+        v_mag = torch.sqrt((capsule_input**2).sum(dim=1))
+        _, v_max_index = v_mag.max(dim=0)
+        v_max_index = v_max_index.data
+
+        capsule_masked = torch.autograd.Variable(torch.zeros(capsule_input.size()))
+        capsule_masked[v_max_index,:] = capsule_input[v_max_index,:]
+        capsule_masked = capsule_masked.view(1, -1)
+
+        feature_counts = features.sum(dim=0)
+        feature_counts = feature_counts/feature_counts.sum()
+
+        reconstruction_output = torch.nn.functional.relu(self.reconstruction_layer_1(capsule_masked))
+        reconstruction_output = torch.nn.functional.relu(self.reconstruction_layer_2(reconstruction_output))
+        reconstruction_output = torch.softmax(self.reconstruction_layer_3(reconstruction_output),dim=1)
+        reconstruction_output = reconstruction_output.view(1, self.number_of_features)
+
+        reconstruction_loss = torch.sum((features-reconstruction_output)**2)
+        return reconstruction_loss
+        
+
+    
+        
 
     def forward(self, data):
         """
@@ -59,7 +106,7 @@ class CapsGNN(torch.nn.Module):
             hidden_representations.append(features)
 
         hidden_representations = torch.cat(tuple(hidden_representations))
-        hidden_representations = hidden_representations.view(1, self.args.gcn_layers, self.args.gcn_filters,-1)
+        hidden_representations = hidden_representations.view(1, self.args.gcn_layers, -1,self.args.gcn_filters).permute(0,1,3,2)
         first_capsule_output = self.first_capsule(hidden_representations)
         first_capsule_output = first_capsule_output.view(-1,self.args.gcn_layers* self.args.gcn_filters*self.args.capsule_dimensions)
         rescaled_capsule_output = self.attention(first_capsule_output)
@@ -69,7 +116,8 @@ class CapsGNN(torch.nn.Module):
         class_capsule_output = self.class_capsule(reshaped_graph_capsule_output)
         class_capsule_output =  class_capsule_output.view(-1, self.number_of_targets*self.args.capsule_dimensions )
         class_capsule_output = torch.mean(class_capsule_output,dim=0).view(1,self.number_of_targets,self.args.capsule_dimensions)
-        return class_capsule_output
+        reconstruction_loss = self.calculate_reconstruction_loss(class_capsule_output.view(self.number_of_targets,self.args.capsule_dimensions), data["features"])
+        return class_capsule_output, reconstruction_loss
         
 
 class CapsGNNTrainer(object):
@@ -195,8 +243,8 @@ class CapsGNNTrainer(object):
                 batch = self.batches[step]
                 for path in batch:
                     data = self.create_input_data(path)
-                    prediction = self.model(data)
-                    loss = margin_loss(prediction, data["target"], self.args.lambd)
+                    prediction, reconstruction_loss = self.model(data)
+                    loss = margin_loss(prediction, data["target"], self.args.lambd)+self.args.theta*reconstruction_loss
                     accumulated_losses = accumulated_losses + loss
                 accumulated_losses = accumulated_losses/len(batch)
                 accumulated_losses.backward()
@@ -215,7 +263,7 @@ class CapsGNNTrainer(object):
         self.hits = []
         for path in tqdm(self.test_graph_paths):
             data = self.create_input_data(path)
-            prediction = self.model(data)
+            prediction, reconstruction_loss = self.model(data)
             prediction_mag = torch.sqrt((prediction**2).sum(dim=2))
             _, prediction_max_index = prediction_mag.max(dim=1)
             prediction = prediction_max_index.data.view(-1).item()
