@@ -29,18 +29,18 @@ def parameter_parser():
 
     parser.add_argument("--batch-size",
                         type = int,
-                        default = 32,
+                        default = 8,
 	                help = "Number of graphs processed per batch. Default is 8.")
 
     parser.add_argument("--gcn-filters",
                         type = int,
-                        default = 2,
-	                help = "Number of Graph Convolutional filters. Default is 2.")
+                        default = 20,
+	                help = "Number of Graph Convolutional filters. Default is 20.")
 
     parser.add_argument("--gcn-layers",
                         type = int,
-                        default = 5,
-	                help = "Number of Graph Convolutional Layers. Default is 5.")
+                        default = 2,
+	                help = "Number of Graph Convolutional Layers. Default is 2.")
 
     parser.add_argument("--inner-attention-dimension",
                         type = int,
