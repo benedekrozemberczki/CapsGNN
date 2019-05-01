@@ -70,6 +70,7 @@ Training a CapsGNN model is handled by the `src/main.py` script which provides t
   --number-of-capsules          INT     Number of capsules in layer.       Default is 8.
   --weight-decay                FLOAT   Weight decay of Adam.              Defatuls is 10^-6.
   --lambd                       FLOAT   Regularization parameter.          Default is 1.0.
+  --theta                       FLOAT   Reconstruction loss weight.        Default is 0.005.
   --learning-rate               FLOAT   Adam learning rate.                Default is 0.01.
 ```
 ### Examples
