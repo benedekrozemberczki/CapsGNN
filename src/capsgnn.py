@@ -27,12 +27,18 @@ class CapsGNN(torch.nn.Module):
         self._setup_layers()
 
     def _setup_base_layers(self):
+        """
+        Creating GCN layers.
+        """
         self.base_layers = [GCNConv(self.number_of_features, self.args.gcn_filters)]
         for layer in range(self.args.gcn_layers-1):
             self.base_layers.append(GCNConv( self.args.gcn_filters, self.args.gcn_filters))
         self.base_layers = ListModule(*self.base_layers)
 
     def _setup_primary_capsules(self):
+        """
+        Creating primary capsules.
+        """
         self.first_capsule = PrimaryCapsuleLayer(self.args.gcn_filters, self.args.gcn_layers, self.args.gcn_layers, self.args.capsule_dimensions)
 
     def _setup_attention(self):
