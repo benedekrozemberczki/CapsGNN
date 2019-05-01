@@ -105,10 +105,6 @@ class CapsGNN(torch.nn.Module):
         reconstruction_loss = torch.sum((features-reconstruction_output)**2)
         return reconstruction_loss
         
-
-    
-        
-
     def forward(self, data):
         """
         Forward propagation pass.
