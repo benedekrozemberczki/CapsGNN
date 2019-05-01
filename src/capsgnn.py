@@ -67,7 +67,6 @@ class CapsGNN(torch.nn.Module):
         self.reconstruction_layer_2 = torch.nn.Linear(int((self.number_of_features * 2) / 3), int((self.number_of_features * 3) / 2))
         self.reconstruction_layer_3 = torch.nn.Linear(int((self.number_of_features * 3) / 2), self.number_of_features)
 
-
     def _setup_layers(self):
         """
         Creating layers of model.
