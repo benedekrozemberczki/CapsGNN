@@ -54,6 +54,9 @@ class CapsGNN(torch.nn.Module):
         self.graph_capsule = SecondaryCapsuleLayer(self.args.gcn_layers*self.args.gcn_filters, self.args.capsule_dimensions, self.args.number_of_capsules, self.args.capsule_dimensions)
 
     def _setup_class_capsule(self):
+        """
+        Creating class capsules.
+        """
         self.class_capsule =  SecondaryCapsuleLayer(self.args.capsule_dimensions,self.args.number_of_capsules, self.number_of_targets, self.args.capsule_dimensions)
 
     def _setup_reconstruction_layers(self):
