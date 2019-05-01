@@ -42,6 +42,9 @@ class CapsGNN(torch.nn.Module):
         self.first_capsule = PrimaryCapsuleLayer(self.args.gcn_filters, self.args.gcn_layers, self.args.gcn_layers, self.args.capsule_dimensions)
 
     def _setup_attention(self):
+        """
+        Creating attention layer.
+        """
         self.attention = Attention(self.args.gcn_layers* self.args.gcn_filters*self.args.capsule_dimensions, self.args.inner_attention_dimension)
 
     def _setup_graph_capsules(self):
