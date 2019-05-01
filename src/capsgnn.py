@@ -85,6 +85,12 @@ class CapsGNN(torch.nn.Module):
         self._setup_reconstruction_layers()
 
     def calculate_reconstruction_loss(self, capsule_input, features):
+        """
+        Calculating the reconstruction loss of the model.
+        :param capsule_input:
+        :param features:
+        :return reconstrcution_loss:
+        """
 
         v_mag = torch.sqrt((capsule_input**2).sum(dim=1))
         _, v_max_index = v_mag.max(dim=0)
@@ -103,6 +109,7 @@ class CapsGNN(torch.nn.Module):
         reconstruction_output = reconstruction_output.view(1, self.number_of_features)
 
         reconstruction_loss = torch.sum((features-reconstruction_output)**2)
+        
         return reconstruction_loss
         
     def forward(self, data):
