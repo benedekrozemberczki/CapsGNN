@@ -1,5 +1,5 @@
 CapsGNN 	
-<img src="https://img.shields.io/badge/stars-430+-blue.svg"/>
+<img src="https://img.shields.io/badge/stars-440+-blue.svg"/>
 <img src="https://img.shields.io/badge/forks-50+-blue.svg"/>
 <img src="https://img.shields.io/badge/license-MIT-blue.svg"/>
 ============================================
