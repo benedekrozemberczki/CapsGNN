@@ -1,6 +1,6 @@
 CapsGNN 	
 <img src="https://img.shields.io/badge/stars-460+-blue.svg"/>
-<img src="https://img.shields.io/badge/forks-50+-blue.svg"/>
+<img src="https://img.shields.io/badge/forks-55+-blue.svg"/>
 <img src="https://img.shields.io/badge/license-MIT-blue.svg"/>
 ============================================
 A PyTorch implementation of "Capsule Graph Neural Network" (ICLR 2019).
