@@ -1,7 +1,5 @@
 CapsGNN 	
-<img src="https://img.shields.io/badge/stars-520+-blue.svg"/>
-<img src="https://img.shields.io/badge/forks-70+-blue.svg"/>
-<img src="https://img.shields.io/badge/license-MIT-blue.svg"/>
+ ![GitHub stars](https://img.shields.io/github/stars/benedekrozemberczki/datasets.svg?style=plastic) ![GitHub forks](https://img.shields.io/github/forks/benedekrozemberczki/datasets.svg?color=blue&style=plastic) ![License](https://img.shields.io/github/license/benedekrozemberczki/datasets.svg?color=blue&style=plastic)
 ============================================
 A PyTorch implementation of "Capsule Graph Neural Network" (ICLR 2019).
 <p align="center">
