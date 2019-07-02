@@ -217,7 +217,8 @@ class CapsGNNTrainer(object):
         :param data: Data dictionary.
         :return : Edge matrix.
         """
-        return torch.t(torch.LongTensor(data["edges"]))
+        edges = [[edge[0],edge[1]] for edge in data["edges"]] + [[edge[1],edge[0]] for edge in data["edges"]]
+        return torch.t(torch.LongTensor(edges))
 
     def create_features(self,data):
         """
