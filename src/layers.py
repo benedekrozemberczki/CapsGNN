@@ -81,7 +81,6 @@ class PrimaryCapsuleLayer(torch.nn.Module):
         u = u.view(x.size(0), self.num_units, -1)
         return PrimaryCapsuleLayer.squash(u)
 
-
 class SecondaryCapsuleLayer(torch.nn.Module):
     """
     Secondary Convolutional Capsule Layer class based on this repostory:
