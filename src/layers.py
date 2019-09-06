@@ -99,7 +99,6 @@ class SecondaryCapsuleLayer(torch.nn.Module):
         self.num_units = num_units
         self.W = torch.nn.Parameter(torch.randn(1, in_channels, num_units, unit_size, in_units))
 
-
     @staticmethod
     def squash(s):
         """
