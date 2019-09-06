@@ -1,6 +1,6 @@
 from utils import tab_printer
-from parser import parameter_parser
 from capsgnn import CapsGNNTrainer
+from parser import parameter_parser
 
 def main():
     """
