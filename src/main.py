@@ -1,6 +1,8 @@
+"""Running CapsGNN."""
+
 from utils import tab_printer
 from capsgnn import CapsGNNTrainer
-from parser import parameter_parser
+from param_parser import parameter_parser
 
 def main():
     """
