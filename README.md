@@ -87,10 +87,12 @@ $ python src/main.py
 </p>
 
 Training a CapsGNNN model for a 100 epochs.
-```
-$ python src/main.py --epochs 100
 ```sh
+$ python src/main.py --epochs 100
+```
+
 Changing the batch size.
+
 ```sh
 $ python src/main.py --batch-size 128
 ```
