@@ -79,7 +79,7 @@ Training a CapsGNN model is handled by the `src/main.py` script which provides t
 ```
 ### Examples
 The following commands learn a model and save the predictions. Training a model on the default dataset:
-```
+```sh
 python src/main.py
 ```
 <p align="center">
@@ -89,8 +89,8 @@ python src/main.py
 Training a CapsGNNN model for a 100 epochs.
 ```
 python src/main.py --epochs 100
-```
+```sh
 Changing the batch size.
-```
+```sh
 python src/main.py --batch-size 128
 ```
