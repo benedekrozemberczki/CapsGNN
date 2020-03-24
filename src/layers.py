@@ -134,7 +134,7 @@ class SecondaryCapsuleLayer(torch.nn.Module):
         num_iterations = 3
 
         for _ in range(num_iterations):
-            c_ij = torch.nn.functional.softmax(b_ij, dim=0)
+            c_ij = torch.nn.functional.softmax(b_ij, dim=2)
             c_ij = torch.cat([c_ij] * batch_size, dim=0).unsqueeze(4)
             s_j = (c_ij * u_hat).sum(dim=1, keepdim=True)
             v_j = SecondaryCapsuleLayer.squash(s_j)
