@@ -2,7 +2,7 @@ CapsGNN
 ============================================
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/capsule-graph-neural-network/graph-classification-on-re-m5k)](https://paperswithcode.com/sota/graph-classification-on-re-m5k?p=capsule-graph-neural-network) ![License](https://img.shields.io/github/license/benedekrozemberczki/CapsGNN.svg?color=blue&style=plastic) [![codebeat badge](https://codebeat.co/badges/997ee932-5f6e-4131-a919-d39a3641e2f3)](https://codebeat.co/projects/github-com-benedekrozemberczki-capsgnn-master)
 
-A PyTorch implementation of "Capsule Graph Neural Network" (ICLR 2019).
+A PyTorch implementation of **Capsule Graph Neural Network (ICLR 2019).**
 <p align="center">
   <img width="800" src="CapsGNN.jpg">
 </p>
