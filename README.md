@@ -98,3 +98,8 @@ Changing the batch size.
 ```sh
 $ python src/main.py --batch-size 128
 ```
+--------------------------------------------------------------------------------
+
+**License**
+
+- [GNU License](https://github.com/benedekrozemberczki/CapsGNN/blob/master/LICENSE)
