@@ -61,8 +61,8 @@ Training a CapsGNN model is handled by the `src/main.py` script which provides t
 
 #### Input and output options
 ```
-  --training-graphs   STR    Training graphs folder.      Default is `dataset/train/`.
-  --testing-graphs    STR    Testing graphs folder.       Default is `dataset/test/`.
+  --training-graphs   STR    Training graphs folder.      Default is `input/train/`.
+  --testing-graphs    STR    Testing graphs folder.       Default is `input/test/`.
   --prediction-path   STR    Output predictions file.     Default is `output/watts_predictions.csv`.
 ```
 #### Model options
