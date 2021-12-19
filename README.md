@@ -98,7 +98,7 @@ Changing the batch size.
 ```sh
 $ python src/main.py --batch-size 128
 ```
-----------------------------
+----------------------
 
 **License**
 
